@@ -1,0 +1,13 @@
+Get-MailboxStatistics username@domain.com | ft DisplayName, TotalItemSize, ItemCount
+
+Get-Mailbox -ResultSize Unlimited | Get-MailboxStatistics | Sort-Object TotalItemSize -Descending | Select-Object DisplayName,TotalItemSize -First 200 | export-csv "c:\Mailbox_Size\mailbox_size.csv"
+
+Get-MailboxStatistics -server SERVERNAME | select displayname, itemcount, @{expression = {$_.TotalItemSize.Value.ToMB()}; label="TotalItemSizeMB"}, lastloggedtime, database | sort totalitemsizeMB | ft  
+
+Get-MailboxStatistics -server SERVERNAME | where {$_.objectclass -eq "mailbox"} | sort totalitemsize -descending | select displayame,@{label="Total Size (MB)";expression={$_.totalitemsize.value.ToMB()}}  | export-csv "c:\temp\mailbox_size.csv"
+ 
+Get-MailboxStatistics -Server 'SERVERNAME' | Where {$_.ObjectClass -eq “Mailbox”} | 
+Select-Object -Property @{label=”User”;expression={$_.DisplayName}},
+@{label=”Total Messages”;expression={$_.ItemCount}},
+@{label=”Total Size (MB)”;expression={$_.TotalItemSize.Value.ToMB()}}, LastLogonTime | 
+Export-CSV "C:\MailBoxSize-Report.csv" -NoTypeInformation -Encoding UTF8
