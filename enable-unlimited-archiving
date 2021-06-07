@@ -1,0 +1,36 @@
+#You have to be a global administrator in your organization or a member of the Organization Management role group in your Exchange Online organization to enable auto-expanding archiving for your entire organization or for specific users. Alternately, you have to be a member of a role group that's assigned the Mail Recipients role to enable auto-expanding archiving for specific users
+
+#In a PowerShell window, load the EXO V2 module by running the following command:
+Import-Module ExchangeOnlineManagement
+
+#If you've already installed the EXO V2 module, the previous command will work as written.
+#You might be able to skip this step and run Connect-ExchangeOnline without loading the module first.
+
+#This example connects to Exchange Online PowerShell in a Microsoft 365 or Microsoft 365 GCC organization
+Connect-ExchangeOnline -UserPrincipalName <admin@domain.com>
+
+#Run the following command in Exchange Online PowerShell to enable auto-expanding archiving for your entire organization.
+Set-OrganizationConfig -AutoExpandingArchive
+
+#Enable auto-expanding archiving for specific users
+
+#Verify that auto-expanding archiving is enabled
+#To verify that auto-expanding archiving is enabled for your organization, run the following command in Exchange Online PowerShell.
+
+Get-OrganizationConfig | FL AutoExpandingArchiveEnabled
+
+#To verify that auto-expanding archiving is enabled for a specific user, run the following command in Exchange Online PowerShell.
+Enable-Mailbox <user mailbox> -AutoExpandingArchive
+
+#To verify that auto-expanding archiving is enabled for a specific user, run the following command in Exchange Online PowerShell.
+Get-Mailbox <user mailbox> | FL AutoExpandingArchiveEnabled
+
+#A value of True indicates that auto-expanding archiving
+
+#To determine if auto-expanding archiving is enabled for inactive mailboxes, run the following command in Exchange Online PowerShell.
+
+Get-Mailbox -InactiveMailboxOnly | FL UserPrincipalName,AutoExpandingArchiveEnabled
+
+#A value of True indicates that auto-expanding archiving is enabled for the inactive mailbox. A value of False indicates that auto-expanding archiving isn't enabled.
+
+Disconnect-ExchangeOnline
